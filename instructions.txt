@@ -1,0 +1,9 @@
+Need:
+-Firefox (v 71.0 preferred)
+	-Installation should be in Program Files and called "Mozilla Firefox71" (e.g. C:\Program Files\Mozilla Firefox71\firefox.exe)
+-Python
+-Pip (should be installed with Python)
+Required Modules (can be installed via Pip):
+-LXML
+-Beautiful Soup (bs4)
+-Selenium

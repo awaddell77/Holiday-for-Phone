@@ -2,3 +2,7 @@
 credentials.py
 *.pyc
 *.csv
+FF_71.0.exe
+geckodriver.log
+geckodriver.log
+holiday_schedule_numbers_completed.txt

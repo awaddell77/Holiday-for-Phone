@@ -8,7 +8,7 @@ class C_sort(object):#for processing CSVs
             self.contents = r_csv(self.fname, mode= 'rt', delim= self.delimiter )
         except UnicodeDecodeError as UDE:
             self.contents = r_csv_2(self.fname, mode = 'rb', encoding='ISO-8859-1')
-            print("Encountered Unicode Decode Error")
+            print("Encountered a Non-Fatal Unicode Decode Error while processing {0}".format(self.fname))
         self.other = other#will be used later for different file formats
     #def contents(self):
         #return r_csv(self.fname)

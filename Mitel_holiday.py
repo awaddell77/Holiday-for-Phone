@@ -2,7 +2,7 @@
 from Sel_session import *
 from dictionarify import *
 import credentials
-import time
+import time, sys
 from os import getcwd, path
 
 
@@ -42,6 +42,7 @@ def file_present(x):
 
 class Mitel_holiday:
 	def __init__(self, holiday_file, number_file):
+		#set the location of the driver argument to wherever the firefox.exe file is on your system
 		
 		self.browser = Sel_session(url='http://www.fsf.org/', driver = 'C:\\Program Files\\Mozilla Firefox71\\firefox.exe')
 		self.def_window	= self.browser.driver.current_window_handle	
@@ -127,27 +128,17 @@ class Mitel_holiday:
 			self.browser.js('document.getElementById("end_am_pm").value = "PM";')
 			self.browser.js('document.getElementById("add").click();')
 		print("Done with adding the holidays, now attempting to submit and save")
-		#try:
-			#self.browser.driver.execute_async_script(("tobeSaved = 0;")) #has to be done since selenium cannot handle the alerts from this site for some reason
-		#except:
-			#print("To be saved == 1: {0}".format(self.browser.js("return tobeSaved == 1")))
+
 		self.browser.js('tobeSaved = 0')
 
 		time.sleep(3)
-		print("tobeSaved == 1: {0}".format(self.browser.js("return tobeSaved == 1"))) #needs to be false
+		print("tobeSaved == 1: {0}".format(self.browser.js("return tobeSaved == 1"))) #needs to be false NOTE THIS DOESN'T ACTUALLY WORK WITHOUT A PROXY
 		self.browser.js('document.getElementById("submit").click();')
 		time.sleep(3)
-		#self.browser.driver.find_element_by_id('name_field').send_keys(Keys.ENTER)
-		#alert = self.browser.driver.switch_to.alert
-		#print("Accepting alert")
-		#print(self.browser.driver.window_handles)
-		#alert.dismiss()
-
-		#alert.send_keys(Keys.ENTER) #throws error
 		print("accepted alert")
 		time.sleep(2) 
-		#self.browser.driver.close() #closes the Holiday Schedule window
 		print("Trying to switch windows") 
+		#this has to be done because the alert in the holiday schedule window doesn't agree with Selenium for some reason
 		self.browser.driver.switch_to_window(self.def_window)
 		time.sleep(1)
 		self.browser.js('document.getElementsByClassName("buttonGreen")[0].children[0].click()')
@@ -155,10 +146,7 @@ class Mitel_holiday:
 		self.browser.driver.close()
 		self.browser.driver.switch_to_window(self.def_window)
 		print("Switched windows")
-
 		time.sleep(2)
-		#self.browser.driver.switch_to.frame(self.browser.driver.find_element_by_name('main'))
-		#time.sleep(2)
 		print("Trying to click the save button")
 		#print("")
 		self.browser.js('document.getElementById("save2_label").click();')
@@ -171,8 +159,14 @@ class Mitel_holiday:
 		return
 
 
-
-m_inst = Mitel_holiday("holidays.csv", "holidayphones.csv")
+if __name__ == '__main__':
+	if sys.argv[1] in ['?', '-help', '-h']: print("Mitel_holiday.py [holiday_file] [phone_file]")
+	else:
+		holiday_file = sys.argv[1]
+		phone_file = sys.argv[2]
+		if '.csv' not in holiday_file or '.csv' not in phone_file: print("Both files must be CSV files")
+		m_inst = Mitel_holiday(holiday_file, phone_file)
+		m_inst.main()
 
 #m_inst.main()
 
